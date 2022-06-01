@@ -53,10 +53,9 @@ public class FilmController {
     }
 
     private void validateFilm(Film film) throws ValidationException {
-        if (film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER, 28)) ||
-                film.getDuration().isNegative() || film.getDuration().isZero()) {
-            log.error("Дата релиза или продолжительность на прошла валидацию: {}", film);
-            throw new ValidationException("Дата релиза или продолжительность на прошла валидацию!");
+        if (film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER, 28))) {
+            log.error("Дата релиза не прошла валидацию: {}", film);
+            throw new ValidationException("Дата релиза не прошла валидацию!");
         }
     }
 }
