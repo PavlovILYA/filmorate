@@ -53,6 +53,10 @@ public class FilmController {
     }
 
     private void validateFilm(Film film) throws ValidationException {
+        if (film == null) {
+            log.error("Тело запроса пустое (должен быть объект Film)");
+            throw new ValidationException("Тело запроса пустое (должен быть объект Film)");
+        }
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER, 28))) {
             log.error("Дата релиза не прошла валидацию: {}", film);
             throw new ValidationException("Дата релиза не прошла валидацию!");
