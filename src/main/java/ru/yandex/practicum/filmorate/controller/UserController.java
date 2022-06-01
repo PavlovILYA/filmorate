@@ -51,13 +51,17 @@ public class UserController {
     }
 
     private void validateUser(User user) throws ValidationException {
-        if (user.getName().isEmpty()) {
-            log.info("Имя пустое -> проставляем логин: {}", user.getLogin());
-            user.setName(user.getLogin());
+        if (user == null) {
+            log.error("Тело запроса пустое (должен быть объект User)");
+            throw new ValidationException("Тело запроса пустое (должен быть объект User)");
         }
         if (user.getLogin().contains(" ")) {
             log.error("Логин содержит пробелы: {}", user);
             throw new ValidationException("Логин содержит пробелы!");
+        }
+        if (user.getName() == null || user.getName().isEmpty()) {
+            log.info("Имя пустое -> проставляем логин: {}", user.getLogin());
+            user.setName(user.getLogin());
         }
     }
 }
