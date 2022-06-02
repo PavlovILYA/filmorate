@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
-@Slf4j
 public class UserController {
     private final Map<Long, User> users = new HashMap<>();
     private final IdGenerator idGenerator;

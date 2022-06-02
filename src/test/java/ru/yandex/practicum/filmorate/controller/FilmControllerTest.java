@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.IdGenerator;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -13,6 +14,7 @@ import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -78,9 +80,9 @@ public class FilmControllerTest {
     @Test
     public void checkMoreThan200SymbolsFilmDescription() {
         testFilm.setDescription("more than 200 symbols; more than 200 symbols; more than 200 symbols; " +
-                                "more than 200 symbols; more than 200 symbols; more than 200 symbols; " +
-                                "more than 200 symbols; more than 200 symbols; more than 200 symbols; " +
-                                "more than 200 symbols; more than 200 symbols; more than 200 symbols; ");
+                "more than 200 symbols; more than 200 symbols; more than 200 symbols; " +
+                "more than 200 symbols; more than 200 symbols; more than 200 symbols; " +
+                "more than 200 symbols; more than 200 symbols; more than 200 symbols; ");
 
         Set<ConstraintViolation<Film>> violations = validator.validate(testFilm);
         assertEquals(1, violations.size());
@@ -127,7 +129,7 @@ public class FilmControllerTest {
         testFilm.setReleaseDate(LocalDate.of(1895, Month.DECEMBER, 27));
 
         ValidationException exception = assertThrows(ValidationException.class, () -> {
-                filmController.createFilm(testFilm);
+            filmController.createFilm(testFilm);
         });
         assertEquals("Дата релиза не прошла валидацию!", exception.getMessage());
     }
