@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.IdNotFoundException;
+import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.IdGenerator;
@@ -41,10 +41,10 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updateFilm(@Valid @RequestBody Film film) throws IdNotFoundException, ValidationException {
+    public Film updateFilm(@Valid @RequestBody Film film) throws FilmNotFoundException, ValidationException {
         if (!films.containsKey(film.getId())) {
             log.error("Попытка обновления фильма с несуществующим id: {}", film.getId());
-            throw new IdNotFoundException("Попытка обновления фильма с несуществующим id!");
+            throw new FilmNotFoundException(film.getId());
         }
         validateFilm(film);
         films.put(film.getId(), film);
