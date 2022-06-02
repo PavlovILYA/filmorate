@@ -19,25 +19,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class FilmControllerTest {
-    private final IdGenerator idGenerator = new IdGenerator();
-    private final FilmController filmController = new FilmController(idGenerator);
-    private Film testFilm;
+    private IdGenerator idGenerator;
     private Validator validator;
 
     @BeforeEach
     public void beforeEach() {
-        testFilm = new Film(); // приемлемые значения
-        testFilm.setName("Имя 1");
-        testFilm.setDescription("Описание 1");
-        testFilm.setReleaseDate(LocalDate.now());
-        testFilm.setDuration(100);
-
+        idGenerator = new IdGenerator();
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
 
     @Test
     public void checkNullFilmName() {
+        Film testFilm = getTestFilm();
         testFilm.setName(null);
 
         Set<ConstraintViolation<Film>> violations = validator.validate(testFilm);
@@ -56,6 +50,7 @@ public class FilmControllerTest {
 
     @Test
     public void checkEmptyFilmName() {
+        Film testFilm = getTestFilm();
         testFilm.setName("");
 
         Set<ConstraintViolation<Film>> violations = validator.validate(testFilm);
@@ -68,10 +63,9 @@ public class FilmControllerTest {
 
     @Test
     public void check200SymbolsFilmDescription() {
-        testFilm.setDescription("200 symbols:        " +
-                "************************************************************" +
-                "************************************************************" +
-                "************************************************************");
+        Film testFilm = getTestFilm();
+        String descriptionWithValidLength = getStringOf200Characters();
+        testFilm.setDescription(descriptionWithValidLength);
 
         Set<ConstraintViolation<Film>> violations = validator.validate(testFilm);
         assertEquals(0, violations.size());
@@ -79,10 +73,9 @@ public class FilmControllerTest {
 
     @Test
     public void checkMoreThan200SymbolsFilmDescription() {
-        testFilm.setDescription("more than 200 symbols; more than 200 symbols; more than 200 symbols; " +
-                "more than 200 symbols; more than 200 symbols; more than 200 symbols; " +
-                "more than 200 symbols; more than 200 symbols; more than 200 symbols; " +
-                "more than 200 symbols; more than 200 symbols; more than 200 symbols; ");
+        Film testFilm = getTestFilm();
+        String descriptionWithInvalidLength = getStringOf201Characters();
+        testFilm.setDescription(descriptionWithInvalidLength);
 
         Set<ConstraintViolation<Film>> violations = validator.validate(testFilm);
         assertEquals(1, violations.size());
@@ -94,31 +87,34 @@ public class FilmControllerTest {
 
     @Test
     public void checkNegativeFilmDuration() {
-        testFilm.setDuration(-1);
+        Film testFilm = getTestFilm();
+        testFilm.setDurationMin(-1);
 
         Set<ConstraintViolation<Film>> violations = validator.validate(testFilm);
         assertEquals(1, violations.size());
         for (ConstraintViolation<Film> violation : violations) {
             assertEquals("должно быть больше 0", violation.getMessage());
-            assertEquals("duration", violation.getPropertyPath().toString());
+            assertEquals("durationMin", violation.getPropertyPath().toString());
         }
     }
 
     @Test
     public void checkZeroFilmDuration() {
-        testFilm.setDuration(0);
+        Film testFilm = getTestFilm();
+        testFilm.setDurationMin(0);
 
         Set<ConstraintViolation<Film>> violations = validator.validate(testFilm);
         assertEquals(1, violations.size());
         for (ConstraintViolation<Film> violation : violations) {
             assertEquals("должно быть больше 0", violation.getMessage());
-            assertEquals("duration", violation.getPropertyPath().toString());
+            assertEquals("durationMin", violation.getPropertyPath().toString());
         }
     }
 
     @Test
     public void checkPositiveFilmDuration() {
-        testFilm.setDuration(1);
+        Film testFilm = getTestFilm();
+        testFilm.setDurationMin(1);
 
         Set<ConstraintViolation<Film>> violations = validator.validate(testFilm);
         assertEquals(0, violations.size());
@@ -126,7 +122,9 @@ public class FilmControllerTest {
 
     @Test
     public void checkEarlierFilmReleaseDate() {
+        Film testFilm = getTestFilm();
         testFilm.setReleaseDate(LocalDate.of(1895, Month.DECEMBER, 27));
+        FilmController filmController = new FilmController(idGenerator);
 
         ValidationException exception = assertThrows(ValidationException.class, () -> {
             filmController.createFilm(testFilm);
@@ -136,9 +134,33 @@ public class FilmControllerTest {
 
     @Test
     public void checkNullFilm() {
+        FilmController filmController = new FilmController(idGenerator);
         ValidationException exception = assertThrows(ValidationException.class, () -> {
             filmController.createFilm(null);
         });
         assertEquals("Тело запроса пустое (должен быть объект Film)", exception.getMessage());
+    }
+
+    private Film getTestFilm() {
+        Film testFilm = new Film(); // приемлемые значения
+        testFilm.setName("Имя 1");
+        testFilm.setDescription("Описание 1");
+        testFilm.setReleaseDate(LocalDate.now());
+        testFilm.setDurationMin(100);
+        return testFilm;
+    }
+
+    private String getStringOf200Characters() {
+        return "0123456789" + "0123456789" + "0123456789" + "0123456789" + "0123456789" +
+                "0123456789" + "0123456789" + "0123456789" + "0123456789" + "0123456789" +
+                "0123456789" + "0123456789" + "0123456789" + "0123456789" + "0123456789" +
+                "0123456789" + "0123456789" + "0123456789" + "0123456789" + "0123456789";
+    }
+
+    private String getStringOf201Characters() {
+        return "0123456789" + "0123456789" + "0123456789" + "0123456789" + "0123456789" +
+                "0123456789" + "0123456789" + "0123456789" + "0123456789" + "0123456789" +
+                "0123456789" + "0123456789" + "0123456789" + "0123456789" + "0123456789" +
+                "0123456789" + "0123456789" + "0123456789" + "0123456789" + "0123456789" + "!";
     }
 }

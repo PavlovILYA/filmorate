@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.validation.constraints.*;
@@ -19,5 +20,6 @@ public class Film {
     private LocalDate releaseDate;
     @NotNull
     @Positive
-    private int duration; // minutes
+    @JsonProperty("duration")
+    private int durationMin;
 }

@@ -20,25 +20,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class UserControllerTest {
-    private final IdGenerator idGenerator = new IdGenerator();
-    private final UserController userController = new UserController(idGenerator);
-    private User testUser;
+    private IdGenerator idGenerator;
     private Validator validator;
 
     @BeforeEach
     public void beforeEach() {
-        testUser = new User(); // приемлемые значения
-        testUser.setName("Имя 1");
-        testUser.setBirthday(LocalDate.of(1999, Month.JUNE, 17));
-        testUser.setEmail("i.e.pavlov@ya.ru");
-        testUser.setLogin("oh_pavlov");
-
+        idGenerator = new IdGenerator();
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
 
     @Test
     public void checkNullEmail() {
+        User testUser = getTestUser();
         testUser.setEmail(null);
 
         Set<ConstraintViolation<User>> violations = validator.validate(testUser);
@@ -51,6 +45,7 @@ public class UserControllerTest {
 
     @Test
     public void checkWrongFormatEmail() {
+        User testUser = getTestUser();
         testUser.setEmail("wrong_email"); // http://www.ex-parrot.com/~pdw/Mail-RFC822-Address.html
 
         Set<ConstraintViolation<User>> violations = validator.validate(testUser);
@@ -63,6 +58,7 @@ public class UserControllerTest {
 
     @Test
     public void checkNullLogin() {
+        User testUser = getTestUser();
         testUser.setLogin(null);
 
         Set<ConstraintViolation<User>> violations = validator.validate(testUser);
@@ -81,6 +77,7 @@ public class UserControllerTest {
 
     @Test
     public void checkEmptyLogin() {
+        User testUser = getTestUser();
         testUser.setLogin("");
 
         Set<ConstraintViolation<User>> violations = validator.validate(testUser);
@@ -93,7 +90,9 @@ public class UserControllerTest {
 
     @Test
     public void checkLoginWithSpace() {
+        User testUser = getTestUser();
         testUser.setLogin("oh pavlov");
+        UserController userController = new UserController(idGenerator);
 
         ValidationException exception = assertThrows(ValidationException.class, () -> {
             userController.createUser(testUser);
@@ -103,7 +102,9 @@ public class UserControllerTest {
 
     @Test
     public void checkNullName() throws ValidationException {
+        User testUser = getTestUser();
         testUser.setName(null);
+        UserController userController = new UserController(idGenerator);
 
         User responseUser = userController.createUser(testUser);
         assertEquals(testUser.getLogin(), responseUser.getName());
@@ -111,7 +112,9 @@ public class UserControllerTest {
 
     @Test
     public void checkEmptyName() throws ValidationException {
+        User testUser = getTestUser();
         testUser.setName("");
+        UserController userController = new UserController(idGenerator);
 
         User responseUser = userController.createUser(testUser);
         assertEquals(testUser.getLogin(), responseUser.getName());
@@ -119,6 +122,7 @@ public class UserControllerTest {
 
     @Test
     public void checkPresentBirthday() {
+        User testUser = getTestUser();
         testUser.setBirthday(LocalDate.now());
 
         Set<ConstraintViolation<User>> violations = validator.validate(testUser);
@@ -131,6 +135,7 @@ public class UserControllerTest {
 
     @Test
     public void checkFutureBirthday() {
+        User testUser = getTestUser();
         testUser.setBirthday(LocalDate.now().plusMonths(1));
 
         Set<ConstraintViolation<User>> violations = validator.validate(testUser);
@@ -143,9 +148,19 @@ public class UserControllerTest {
 
     @Test
     public void checkNullUser() {
+        UserController userController = new UserController(idGenerator);
         ValidationException exception = assertThrows(ValidationException.class, () -> {
             userController.createUser(null);
         });
         assertEquals("Тело запроса пустое (должен быть объект User)", exception.getMessage());
+    }
+
+    private User getTestUser() {
+        User testUser = new User(); // приемлемые значения
+        testUser.setName("Имя 1");
+        testUser.setBirthday(LocalDate.of(1999, Month.JUNE, 17));
+        testUser.setEmail("i.e.pavlov@ya.ru");
+        testUser.setLogin("oh_pavlov");
+        return testUser;
     }
 }
