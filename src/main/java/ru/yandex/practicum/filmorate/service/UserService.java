@@ -36,6 +36,11 @@ public class UserService {
         return userStorage.getAll();
     }
 
+    public User get(long id) {
+        log.info("Получение пользователя {}", id);
+        return userStorage.get(id);
+    }
+
     public void makeFriends(long userId1, long userId2) {
         User user1 = userStorage.get(userId1);
         User user2 = userStorage.get(userId2);

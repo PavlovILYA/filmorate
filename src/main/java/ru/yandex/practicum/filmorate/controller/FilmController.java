@@ -43,6 +43,12 @@ public class FilmController {
         return filmService.update(film);
     }
 
+    @GetMapping("/{id}")
+    public Film getFilm(@PathVariable("id") long id) {
+        log.info("/films/{} (GET)", id);
+        return filmService.get(id);
+    }
+
     private void validateFilm(Film film) {
         if (film == null) {
             log.error("Тело запроса пустое (должен быть объект Film)");

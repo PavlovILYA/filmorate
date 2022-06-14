@@ -38,6 +38,12 @@ public class UserController {
         return userService.update(user);
     }
 
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable("id") long id) {
+        log.info("/users{} (GET)", id);
+        return userService.get(id);
+    }
+
     private void validateUser(User user) {
         if (user == null) {
             log.error("Тело запроса пустое (должен быть объект User)");
