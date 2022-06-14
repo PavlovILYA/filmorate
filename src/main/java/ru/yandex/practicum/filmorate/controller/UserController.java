@@ -40,8 +40,35 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable("id") long id) {
-        log.info("/users{} (GET)", id);
+        log.info("/users/{} (GET)", id);
         return userService.get(id);
+    }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public void makeFriends(@PathVariable("id") long id,
+                            @PathVariable("friendId") long friendId) {
+        log.info("/users/{}/friends/{} (PUT)", id, friendId);
+        userService.makeFriends(id, friendId);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public void stopBeingFriends(@PathVariable("id") long id,
+                                 @PathVariable("friendId") long friendId) {
+        log.info("/users/{}/friends/{} (DELETE)", id, friendId);
+        userService.stopBeingFriends(id, friendId);
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> getFriends(@PathVariable("id") long id) {
+        log.info("/users/{}/friends (GET)", id);
+        return userService.getFriends(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> getFriends(@PathVariable("id") long id,
+                                 @PathVariable("otherId") long otherId) {
+        log.info("/users/{}/friends/common/{} (GET)", id, otherId);
+        return userService.getCommonFriends(id, otherId);
     }
 
     private void validateUser(User user) {

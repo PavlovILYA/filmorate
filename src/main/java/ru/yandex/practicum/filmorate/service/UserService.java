@@ -7,8 +7,7 @@ import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -58,6 +57,16 @@ public class UserService {
     public List<User> getFriends(long userId) {
         List<User> friends = new ArrayList<>();
         return userStorage.get(userId).getFriends().stream()
+                .map(userStorage::get)
+                .collect(Collectors.toList());
+    }
+
+    public List<User> getCommonFriends(long userId1, long userId2) {
+        User user1 = userStorage.get(userId1);
+        User user2 = userStorage.get(userId2);
+        Set<Long> commonFriendsId = new HashSet<>(user1.getFriends());
+        commonFriendsId.retainAll(user2.getFriends());
+        return commonFriendsId.stream()
                 .map(userStorage::get)
                 .collect(Collectors.toList());
     }
