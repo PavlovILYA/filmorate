@@ -49,4 +49,12 @@ public class InMemoryFilmStorage implements FilmStorage {
     public List<Film> getAll() {
         return new ArrayList<>(films.values());
     }
+
+    @Override
+    public Film get(long filmId) {
+        if (!films.containsKey(filmId)) {
+            throw new FilmNotFoundException(filmId);
+        }
+        return films.get(filmId);
+    }
 }

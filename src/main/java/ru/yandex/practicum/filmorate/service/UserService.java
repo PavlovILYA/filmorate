@@ -40,14 +40,14 @@ public class UserService {
         User user1 = userStorage.get(userId1);
         User user2 = userStorage.get(userId2);
         user1.addFriend(userId2);
-        user2.addFriend(userId1);
+        user2.addFriend(userId1); // update?
     }
 
     public void stopBeingFriends(long userId1, long userId2) {
         User user1 = userStorage.get(userId1);
         User user2 = userStorage.get(userId2);
         user1.removeFriend(userId2);
-        user2.removeFriend(userId1);
+        user2.removeFriend(userId1); // update?
     }
 
     public List<User> getFriends(long userId) {
