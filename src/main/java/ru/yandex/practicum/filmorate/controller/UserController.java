@@ -2,55 +2,43 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.IdGenerator;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final Map<Long, User> users = new HashMap<>();
-    private final IdGenerator idGenerator;
-
-    public UserController(IdGenerator idGenerator) {
-        this.idGenerator = idGenerator;
+    private final UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
     public List<User> getUsers() {
-        return new ArrayList<>(users.values());
+        log.info("/users (GET)");
+        return userService.getAll();
     }
 
     @PostMapping
-    public User createUser(@Valid @RequestBody User user) throws ValidationException {
+    public User createUser(@Valid @RequestBody User user) {
+        log.info("/users (POST): {}", user);
         validateUser(user);
-        user.setId(idGenerator.nextId());
-        users.put(user.getId(), user);
-        log.info("Пользователь добавлен: {}", user);
-        return user;
+        return userService.create(user);
     }
 
     @PutMapping
-    public User updateUser(@Valid @RequestBody User user) throws UserNotFoundException, ValidationException {
-        if (!users.containsKey(user.getId())) {
-            log.error("Попытка обновления пользователя с несуществующим id: {}", user.getId());
-            throw new UserNotFoundException(user.getId());
-        }
+    public User updateUser(@Valid @RequestBody User user) {
+        log.info("/users (PUT): {}", user);
         validateUser(user);
-        users.put(user.getId(), user);
-        log.info("Пользователь обновлен: {}", user);
-        return user;
+        return userService.update(user);
     }
 
-    private void validateUser(User user) throws ValidationException {
+    private void validateUser(User user) {
         if (user == null) {
             log.error("Тело запроса пустое (должен быть объект User)");
             throw new ValidationException("Тело запроса пустое (должен быть объект User)");

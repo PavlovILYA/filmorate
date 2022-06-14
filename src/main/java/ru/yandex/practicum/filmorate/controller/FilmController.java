@@ -1,58 +1,49 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.IdGenerator;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private final Map<Long, Film> films = new HashMap<>();
-    private final IdGenerator idGenerator;
+    private final FilmService filmService;
 
-    public FilmController(IdGenerator idGenerator) {
-        this.idGenerator = idGenerator;
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
     }
 
     @GetMapping
     public List<Film> getFilms() {
-        return new ArrayList<>(films.values());
+        log.info("/films (GET)");
+        return filmService.getAll();
     }
 
     @PostMapping
-    public Film createFilm(@Valid @RequestBody Film film) throws ValidationException {
+    public Film createFilm(@Valid @RequestBody Film film) {
+        log.info("/films (POST): {}", film);
         validateFilm(film);
-        film.setId(idGenerator.nextId());
-        films.put(film.getId(), film);
-        log.info("Фильм добавлен: {}", film);
-        return film;
+        return filmService.create(film);
     }
 
     @PutMapping
-    public Film updateFilm(@Valid @RequestBody Film film) throws FilmNotFoundException, ValidationException {
-        if (!films.containsKey(film.getId())) {
-            log.error("Попытка обновления фильма с несуществующим id: {}", film.getId());
-            throw new FilmNotFoundException(film.getId());
-        }
+    public Film updateFilm(@Valid @RequestBody Film film) {
+        log.info("/films (PUT): {}", film);
         validateFilm(film);
-        films.put(film.getId(), film);
-        log.info("Фильм обновлен: {}", film);
-        return film;
+        return filmService.update(film);
     }
 
-    private void validateFilm(Film film) throws ValidationException {
+    private void validateFilm(Film film) {
         if (film == null) {
             log.error("Тело запроса пустое (должен быть объект Film)");
             throw new ValidationException("Тело запроса пустое (должен быть объект Film)");
