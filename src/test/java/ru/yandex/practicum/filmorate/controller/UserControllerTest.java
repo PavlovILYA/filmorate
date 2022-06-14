@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -21,16 +20,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class UserControllerTest {
-    private final UserController userController;
+    private IdGenerator idGenerator;
     private Validator validator;
-
-    @Autowired
-    public UserControllerTest(UserController userController) {
-        this.userController = userController;
-    }
 
     @BeforeEach
     public void beforeEach() {
+        idGenerator = new IdGenerator();
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
@@ -97,6 +92,7 @@ public class UserControllerTest {
     public void checkLoginWithSpace() {
         User testUser = getTestUser();
         testUser.setLogin("oh pavlov");
+        UserController userController = new UserController(idGenerator);
 
         ValidationException exception = assertThrows(ValidationException.class, () -> {
             userController.createUser(testUser);
@@ -108,6 +104,7 @@ public class UserControllerTest {
     public void checkNullName() throws ValidationException {
         User testUser = getTestUser();
         testUser.setName(null);
+        UserController userController = new UserController(idGenerator);
 
         User responseUser = userController.createUser(testUser);
         assertEquals(testUser.getLogin(), responseUser.getName());
@@ -117,6 +114,7 @@ public class UserControllerTest {
     public void checkEmptyName() throws ValidationException {
         User testUser = getTestUser();
         testUser.setName("");
+        UserController userController = new UserController(idGenerator);
 
         User responseUser = userController.createUser(testUser);
         assertEquals(testUser.getLogin(), responseUser.getName());
@@ -150,6 +148,7 @@ public class UserControllerTest {
 
     @Test
     public void checkNullUser() {
+        UserController userController = new UserController(idGenerator);
         ValidationException exception = assertThrows(ValidationException.class, () -> {
             userController.createUser(null);
         });

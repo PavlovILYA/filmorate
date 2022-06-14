@@ -2,10 +2,10 @@ package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.IdGenerator;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -19,16 +19,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class FilmControllerTest {
-    private final FilmController filmController;
+    private IdGenerator idGenerator;
     private Validator validator;
-
-    @Autowired
-    public FilmControllerTest(FilmController filmController) {
-        this.filmController = filmController;
-    }
 
     @BeforeEach
     public void beforeEach() {
+        idGenerator = new IdGenerator();
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
@@ -128,6 +124,7 @@ public class FilmControllerTest {
     public void checkEarlierFilmReleaseDate() {
         Film testFilm = getTestFilm();
         testFilm.setReleaseDate(LocalDate.of(1895, Month.DECEMBER, 27));
+        FilmController filmController = new FilmController(idGenerator);
 
         ValidationException exception = assertThrows(ValidationException.class, () -> {
             filmController.createFilm(testFilm);
@@ -137,6 +134,7 @@ public class FilmControllerTest {
 
     @Test
     public void checkNullFilm() {
+        FilmController filmController = new FilmController(idGenerator);
         ValidationException exception = assertThrows(ValidationException.class, () -> {
             filmController.createFilm(null);
         });

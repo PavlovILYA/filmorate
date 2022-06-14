@@ -5,8 +5,6 @@ import lombok.Data;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 public class Film {
@@ -24,13 +22,4 @@ public class Film {
     @Positive
     @JsonProperty("duration")
     private int durationMin;
-    private final Set<Long> likes = new HashSet<>();
-
-    public void addLike(long userId) {
-        likes.add(userId);
-    }
-
-    public void removeLike(long userId) {
-        likes.remove(userId);
-    }
 }
