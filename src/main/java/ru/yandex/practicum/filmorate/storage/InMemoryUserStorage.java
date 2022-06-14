@@ -49,4 +49,12 @@ public class InMemoryUserStorage implements UserStorage {
     public List<User> getAll() {
         return new ArrayList<>(users.values());
     }
+
+    @Override
+    public User get(long userId) {
+        if (!users.containsKey(userId)) {
+            throw new UserNotFoundException(userId);
+        }
+        return users.get(userId);
+    }
 }
