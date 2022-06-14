@@ -44,24 +44,24 @@ public class FilmService {
         return filmStorage.get(id);
     }
 
-    public void addLike(long userId, long filmId) {
+    public void like(long userId, long filmId) {
         User user = userStorage.get(userId);
         Film film = filmStorage.get(filmId);
         user.addLike(filmId);
         film.addLike(userId); // update?
     }
 
-    public void removeLike(long userId, long filmId) {
+    public void unlike(long userId, long filmId) {
         User user = userStorage.get(userId);
         Film film = filmStorage.get(filmId);
         user.removeLike(filmId);
         film.removeLike(userId); // update?
     }
 
-    public List<Film> getPopularFilms() {
+    public List<Film> getPopularFilms(int count) {
         return filmStorage.getAll().stream()
                 .sorted(Comparator.comparingInt(film -> film.getLikes().size()))
-                .limit(10)
+                .limit(count)
                 .collect(Collectors.toList());
     }
 }

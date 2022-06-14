@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -45,6 +46,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}/friends/{friendId}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void makeFriends(@PathVariable("id") long id,
                             @PathVariable("friendId") long friendId) {
         log.info("/users/{}/friends/{} (PUT)", id, friendId);
@@ -52,6 +54,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void stopBeingFriends(@PathVariable("id") long id,
                                  @PathVariable("friendId") long friendId) {
         log.info("/users/{}/friends/{} (DELETE)", id, friendId);
@@ -65,6 +68,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
+    @ResponseStatus(value = HttpStatus.OK)
     public List<User> getFriends(@PathVariable("id") long id,
                                  @PathVariable("otherId") long otherId) {
         log.info("/users/{}/friends/common/{} (GET)", id, otherId);

@@ -49,6 +49,26 @@ public class FilmController {
         return filmService.get(id);
     }
 
+    @PutMapping("/{id}/like/{userId}")
+    public void like(@PathVariable("id") long id,
+                     @PathVariable("userId") long userId) {
+        log.info("/films/{}/like/{} (PUT)", id, userId);
+        filmService.like(id, userId);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public void unlike(@PathVariable("id") long id,
+                     @PathVariable("userId") long userId) {
+        log.info("/films/{}/like/{} (DELETE)", id, userId);
+        filmService.unlike(id, userId);
+    }
+
+    @GetMapping("/popular")
+    public List<Film> getPopular(@RequestParam("count") int count) {
+        log.info("/films/popular?count={} (GET)", count);
+        return filmService.getPopularFilms(count);
+    }
+
     private void validateFilm(Film film) {
         if (film == null) {
             log.error("Тело запроса пустое (должен быть объект Film)");
