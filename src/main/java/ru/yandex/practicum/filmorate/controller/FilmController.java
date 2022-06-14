@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -24,12 +25,14 @@ public class FilmController {
     }
 
     @GetMapping
+    @ResponseStatus(value = HttpStatus.OK)
     public List<Film> getFilms() {
         log.info("/films (GET)");
         return filmService.getAll();
     }
 
     @PostMapping
+    @ResponseStatus(value = HttpStatus.OK)
     public Film createFilm(@Valid @RequestBody Film film) {
         log.info("/films (POST): {}", film);
         validateFilm(film);
@@ -37,6 +40,7 @@ public class FilmController {
     }
 
     @PutMapping
+    @ResponseStatus(value = HttpStatus.OK)
     public Film updateFilm(@Valid @RequestBody Film film) {
         log.info("/films (PUT): {}", film);
         validateFilm(film);
@@ -44,12 +48,14 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
     public Film getFilm(@PathVariable("id") long id) {
         log.info("/films/{} (GET)", id);
         return filmService.get(id);
     }
 
     @PutMapping("/{id}/like/{userId}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void like(@PathVariable("id") long id,
                      @PathVariable("userId") long userId) {
         log.info("/films/{}/like/{} (PUT)", id, userId);
@@ -57,6 +63,7 @@ public class FilmController {
     }
 
     @DeleteMapping("/{id}/like/{userId}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void unlike(@PathVariable("id") long id,
                      @PathVariable("userId") long userId) {
         log.info("/films/{}/like/{} (DELETE)", id, userId);
@@ -64,7 +71,8 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public List<Film> getPopular(@RequestParam("count") int count) {
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<Film> getPopular(@RequestParam(value = "count", defaultValue = "10") int count) {
         log.info("/films/popular?count={} (GET)", count);
         return filmService.getPopularFilms(count);
     }

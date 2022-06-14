@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -22,8 +23,8 @@ public class User {
     @Past
     @NotNull
     private LocalDate birthday;
-    private Set<Long> friends;
-    private Set<Long> likes;
+    private final Set<Long> friends = new HashSet<>();
+    private final Set<Long> likes = new HashSet<>();
 
     public void addFriend(long friendId) {
         friends.add(friendId);

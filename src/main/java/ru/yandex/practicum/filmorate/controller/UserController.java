@@ -20,12 +20,14 @@ public class UserController {
     }
 
     @GetMapping
+    @ResponseStatus(value = HttpStatus.OK)
     public List<User> getUsers() {
         log.info("/users (GET)");
         return userService.getAll();
     }
 
     @PostMapping
+    @ResponseStatus(value = HttpStatus.OK)
     public User createUser(@Valid @RequestBody User user) {
         log.info("/users (POST): {}", user);
         validateUser(user);
@@ -33,6 +35,7 @@ public class UserController {
     }
 
     @PutMapping
+    @ResponseStatus(value = HttpStatus.OK)
     public User updateUser(@Valid @RequestBody User user) {
         log.info("/users (PUT): {}", user);
         validateUser(user);
@@ -40,6 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
     public User getUser(@PathVariable("id") long id) {
         log.info("/users/{} (GET)", id);
         return userService.get(id);
@@ -62,6 +66,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/friends")
+    @ResponseStatus(value = HttpStatus.OK)
     public List<User> getFriends(@PathVariable("id") long id) {
         log.info("/users/{}/friends (GET)", id);
         return userService.getFriends(id);
