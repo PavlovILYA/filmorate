@@ -75,7 +75,7 @@ SELECT f.name
   GROUP BY f.name
   ORDER BY COUNT(*) DESC;
 ```
-5. *Вывести только фильмы категории [mpa1]*
+5. *Вывести только фильмы категории [mpa1].*
 ``` sql
 SELECT f.name
   FROM film AS f
