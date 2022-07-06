@@ -7,14 +7,14 @@
 ![This is an image](src/main/resources/static/filmorate_db.png)
 
 __*Примеры запросов*:__
-1. *Выбрать <N> самых популярных фильмов.*
+1. *Выбрать [N] самых популярных фильмов.*
 ``` sql
 SELECT f.name, COUNT(*) AS likes
   FROM Film AS f
   JOIN Like AS l ON f.id = l.film_id
   GROUP BY name
   ORDER BY likes DESC
-  LIMIT <N>;
+  LIMIT [N];
 ```
 2. *Вывести список общих друзей пользователей с [id1] и [id2].*
 ``` sql
@@ -74,4 +74,11 @@ SELECT f.name
   JOIN like AS l ON f.id = l.film_id
   GROUP BY f.name
   ORDER BY COUNT(*) DESC;
+```
+5. *Вывести только фильмы категории [mpa1]*
+``` sql
+SELECT f.name
+  FROM film AS f
+  JOIN mpa AS m ON f.mpa_id = m.id
+  WHERE m.type = [mpa1];
 ```
