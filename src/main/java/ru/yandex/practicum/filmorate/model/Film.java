@@ -27,16 +27,7 @@ public class Film {
     @Positive
     @JsonProperty("duration")
     private int duration;
-    private List<Genre> genres;
+    private Set<Genre> genres;
     private Mpa mpa;
     private int rate;
-//    private final Set<Long> likes = new HashSet<>();
-
-//    public void addLike(long userId) {
-//        likes.add(userId);
-//    }
-//
-//    public void removeLike(long userId) {
-//        likes.remove(userId);
-//    }
 }

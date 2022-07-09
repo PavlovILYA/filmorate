@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@AllArgsConstructor
 public class User {
     private long id;
     @Email
@@ -23,33 +25,4 @@ public class User {
     @Past
     @NotNull
     private LocalDate birthday;
-//    private final Set<Long> friends = new HashSet<>();
-//    private final Set<Long> likes = new HashSet<>();
-
-    public User() {
-    }
-
-    public User(long id, String email, String login, String name, LocalDate birthday) {
-        this.id = id;
-        this.email = email;
-        this.login = login;
-        this.name = name;
-        this.birthday = birthday;
-    }
-
-//    public void addFriend(long friendId) {
-////        friends.add(friendId);
-//    }
-//
-//    public void removeFriend(long friendId) {
-////        friends.remove(friendId);
-//    }
-//
-//    public void addLike(long filmId) {
-////        likes.add(filmId);
-//    }
-//
-//    public void removeLike(long filmId) {
-////        likes.remove(filmId);
-//    }
 }
