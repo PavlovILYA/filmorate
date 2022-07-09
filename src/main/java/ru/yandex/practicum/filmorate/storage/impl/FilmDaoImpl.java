@@ -20,10 +20,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -104,6 +101,20 @@ public class FilmDaoImpl implements FilmDao {
             throw new FilmNotFoundException();
         }
         return film;
+    }
+
+    @Override
+    public List<Film> getPopular(int size) {
+        String sqlQuery = "SELECT f.id \n" +
+                "FROM film AS f \n" +
+                "JOIN user_like AS l ON f.id = l.film_id \n" +
+                "GROUP BY f.name \n" +
+                "ORDER BY COUNT(*) DESC \n" +
+                "LIMIT ?;";
+        List<Integer> popularFilmIds = jdbcTemplate.queryForList(sqlQuery, Integer.class, size);
+        return popularFilmIds.stream()
+                .map(this::get)
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     public Film buildFilm(ResultSet resultSet) throws SQLException {

@@ -6,21 +6,21 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmDao;
-import ru.yandex.practicum.filmorate.storage.UserDao;
+import ru.yandex.practicum.filmorate.storage.UserLikeDao;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class FilmService {
     private final FilmDao filmStorage;
-    private final UserDao userStorage;
+    private final UserLikeDao userLikeDao;
 
     @Autowired
-    public FilmService(@Qualifier("filmDaoImpl") FilmDao filmStorage,
-                       @Qualifier("userDaoImpl") UserDao userStorage) {
+    public FilmService(@Qualifier("filmDaoImpl") FilmDao filmStorage, UserLikeDao userLikeDao) {
         this.filmStorage = filmStorage;
-        this.userStorage = userStorage;
+        this.userLikeDao = userLikeDao;
     }
 
     public Film create(Film film) {
@@ -43,25 +43,22 @@ public class FilmService {
         return filmStorage.get(id);
     }
 
-    public void like(long userId, long filmId) {
-//        User user = userStorage.get(userId);
-//        Film film = filmStorage.get(filmId);
-//        user.addLike(filmId);
-//        film.addLike(userId); // update?
+    public void like(long filmId, long userId) {
+        userLikeDao.create(filmId, userId);
     }
 
-    public void unlike(long userId, long filmId) {
-//        User user = userStorage.get(userId);
-//        Film film = filmStorage.get(filmId);
-//        user.removeLike(filmId);
-//        film.removeLike(userId); // update?
+    public void unlike(long filmId, long userId) {
+        userLikeDao.remove(filmId, userId);
     }
 
     public List<Film> getPopularFilms(int count) {
-//        return filmStorage.getAll().stream()
-//                .sorted(Comparator.comparingInt(film -> film.getLikes().size()))
-//                .limit(count)
-//                .collect(Collectors.toList());
-        return null;
+        List<Film> popularFilms = filmStorage.getPopular(count);
+        if (popularFilms.isEmpty()) {
+            return filmStorage.getAll().stream()
+                    .limit(count)
+                    .collect(Collectors.toList());
+        } else {
+            return popularFilms;
+        }
     }
 }

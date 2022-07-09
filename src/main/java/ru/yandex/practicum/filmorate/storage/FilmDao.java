@@ -10,5 +10,5 @@ public interface FilmDao {
     void delete(Film film);
     List<Film> getAll();
     Film get(long filmId);
-
+    List<Film> getPopular(int size);
 }
