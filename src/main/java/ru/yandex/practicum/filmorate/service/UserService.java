@@ -56,22 +56,10 @@ public class UserService {
     }
 
     public List<User> getFriends(long userId) {
-        List<User> friends = new ArrayList<>();
-        return userStorage.get(userId).getFriends().stream()
-                .map(userStorage::get)
-                .collect(Collectors.toList());
+        return userStorage.getFriends(userId);
     }
 
     public List<User> getCommonFriends(long userId1, long userId2) {
-        User user1 = userStorage.get(userId1);
-        User user2 = userStorage.get(userId2);
-        if (user1.getFriends() == null) {
-            return new ArrayList<>();
-        }
-        Set<Long> commonFriendsId = new HashSet<>(user1.getFriends());
-        commonFriendsId.retainAll(user2.getFriends());
-        return commonFriendsId.stream()
-                .map(userStorage::get)
-                .collect(Collectors.toList());
+        return userStorage.getCommonFriends(userId1, userId2);
     }
 }

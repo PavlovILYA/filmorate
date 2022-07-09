@@ -10,4 +10,8 @@ public interface UserStorage {
     void delete(User user);
     List<User> getAll();
     User get(long userId);
+    List<User> getFriends(long userId);
+    List<User> getCommonFriends(long userId1, long userId2);
+    void makeFriends(long userId1, long userId2);
+    void stopBeingFriends(long userId1, long userId2);
 }

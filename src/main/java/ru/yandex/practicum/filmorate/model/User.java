@@ -23,22 +23,33 @@ public class User {
     @Past
     @NotNull
     private LocalDate birthday;
-    private final Set<Long> friends = new HashSet<>();
-    private final Set<Long> likes = new HashSet<>();
+//    private final Set<Long> friends = new HashSet<>();
+//    private final Set<Long> likes = new HashSet<>();
+
+    public User() {
+    }
+
+    public User(long id, String email, String login, String name, LocalDate birthday) {
+        this.id = id;
+        this.email = email;
+        this.login = login;
+        this.name = name;
+        this.birthday = birthday;
+    }
 
     public void addFriend(long friendId) {
-        friends.add(friendId);
+//        friends.add(friendId);
     }
 
     public void removeFriend(long friendId) {
-        friends.remove(friendId);
+//        friends.remove(friendId);
     }
 
     public void addLike(long filmId) {
-        likes.add(filmId);
+//        likes.add(filmId);
     }
 
     public void removeLike(long filmId) {
-        likes.remove(filmId);
+//        likes.remove(filmId);
     }
 }
