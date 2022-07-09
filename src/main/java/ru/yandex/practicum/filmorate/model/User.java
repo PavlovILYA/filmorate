@@ -37,19 +37,19 @@ public class User {
         this.birthday = birthday;
     }
 
-    public void addFriend(long friendId) {
-//        friends.add(friendId);
-    }
-
-    public void removeFriend(long friendId) {
-//        friends.remove(friendId);
-    }
-
-    public void addLike(long filmId) {
-//        likes.add(filmId);
-    }
-
-    public void removeLike(long filmId) {
-//        likes.remove(filmId);
-    }
+//    public void addFriend(long friendId) {
+////        friends.add(friendId);
+//    }
+//
+//    public void removeFriend(long friendId) {
+////        friends.remove(friendId);
+//    }
+//
+//    public void addLike(long filmId) {
+////        likes.add(filmId);
+//    }
+//
+//    public void removeLike(long filmId) {
+////        likes.remove(filmId);
+//    }
 }

@@ -6,8 +6,41 @@ DELETE FROM GENRE;
 DELETE FROM MPA;
 
 ALTER TABLE FRIENDSHIP ALTER COLUMN id RESTART WITH 1;
-ALTER TABLE USER_LIKE ALTER COLUMN id RESTART WITH 1;
 ALTER TABLE FILMORATE_USER ALTER COLUMN id RESTART WITH 1;
 ALTER TABLE FILM ALTER COLUMN id RESTART WITH 1;
 ALTER TABLE GENRE ALTER COLUMN id RESTART WITH 1;
 ALTER TABLE MPA ALTER COLUMN id RESTART WITH 1;
+
+MERGE INTO genre (id, name)
+    VALUES(1, 'Комедия');
+
+MERGE INTO genre (id, name)
+    VALUES(2, 'Драма');
+
+MERGE INTO genre (id, name)
+    VALUES(3, 'Мультфильм');
+
+MERGE INTO genre (id, name)
+    VALUES(4, 'Триллер');
+
+MERGE INTO genre (id, name)
+    VALUES(5, 'Документальный');
+
+MERGE INTO genre (id, name)
+    VALUES(6, 'Боевик');
+
+
+MERGE INTO mpa (id, name)
+    VALUES(1, 'G');
+
+MERGE INTO mpa (id, name)
+    VALUES(2, 'PG');
+
+MERGE INTO mpa (id, name)
+    VALUES(3, 'PG-13');
+
+MERGE INTO mpa (id, name)
+    VALUES(4, 'R');
+
+MERGE INTO mpa (id, name)
+    VALUES(5, 'NC-17');

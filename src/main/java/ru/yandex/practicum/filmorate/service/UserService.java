@@ -4,20 +4,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.UserDao;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class UserService {
-    private final UserStorage userStorage;
+    private final UserDao userStorage;
 
     @Autowired
-    public UserService(@Qualifier("dbUserStorage") UserStorage userStorage) {
+    public UserService(@Qualifier("userDaoImpl") UserDao userStorage) {
         this.userStorage = userStorage;
     }
 
@@ -42,17 +40,18 @@ public class UserService {
     }
 
     public void makeFriends(long userId1, long userId2) {
-        User user1 = userStorage.get(userId1);
-        User user2 = userStorage.get(userId2);
-        user1.addFriend(userId2);
-        user2.addFriend(userId1); // update?
+        userStorage.makeFriends(userId1, userId2);
+//        User user1 = userStorage.get(userId1);
+//        User user2 = userStorage.get(userId2);
+//        user1.addFriend(userId2);
+//        user2.addFriend(userId1); // update?
     }
 
     public void stopBeingFriends(long userId1, long userId2) {
-        User user1 = userStorage.get(userId1);
-        User user2 = userStorage.get(userId2);
-        user1.removeFriend(userId2);
-        user2.removeFriend(userId1); // update?
+//        User user1 = userStorage.get(userId1);
+//        User user2 = userStorage.get(userId2);
+//        user1.removeFriend(userId2);
+//        user2.removeFriend(userId1); // update?
     }
 
     public List<User> getFriends(long userId) {
