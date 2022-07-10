@@ -14,33 +14,33 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class FilmService {
-    private final FilmDao filmStorage;
+    private final FilmDao filmDao;
     private final UserLikeDao userLikeDao;
 
     @Autowired
-    public FilmService(@Qualifier("filmDaoImpl") FilmDao filmStorage, UserLikeDao userLikeDao) {
-        this.filmStorage = filmStorage;
+    public FilmService(@Qualifier("filmDaoImpl") FilmDao filmDao, UserLikeDao userLikeDao) {
+        this.filmDao = filmDao;
         this.userLikeDao = userLikeDao;
     }
 
     public Film create(Film film) {
         log.info("Создание фильма: {}", film);
-        return filmStorage.create(film);
+        return filmDao.create(film);
     }
 
     public Film update(Film film) {
         log.info("Обновление фильма: {}", film);
-        return filmStorage.update(film);
+        return filmDao.update(film);
     }
 
     public List<Film> getAll() {
         log.info("Получение всех фильмов");
-        return filmStorage.getAll();
+        return filmDao.getAll();
     }
 
     public Film get(long id) {
         log.info("Получение фильма {}", id);
-        return filmStorage.get(id);
+        return filmDao.get(id);
     }
 
     public void like(long filmId, long userId) {
@@ -52,9 +52,9 @@ public class FilmService {
     }
 
     public List<Film> getPopularFilms(int count) {
-        List<Film> popularFilms = filmStorage.getPopular(count);
+        List<Film> popularFilms = filmDao.getPopular(count);
         if (popularFilms.isEmpty()) {
-            return filmStorage.getAll().stream()
+            return filmDao.getAll().stream()
                     .limit(count)
                     .collect(Collectors.toList());
         } else {
