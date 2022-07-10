@@ -101,8 +101,7 @@ public class FriendshipDaoImpl implements FriendshipDao {
     }
 
     public Friendship buildFriendship(ResultSet resultSet) throws SQLException {
-        return new Friendship(resultSet.getLong("id"),
-                resultSet.getLong("active_user_id"),
+        return new Friendship(resultSet.getLong("active_user_id"),
                 resultSet.getLong("passive_user_id"),
                 resultSet.getBoolean("is_accepted"));
     }

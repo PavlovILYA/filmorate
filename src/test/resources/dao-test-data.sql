@@ -4,7 +4,6 @@ DELETE FROM users;
 DELETE FROM film_genres;
 DELETE FROM films;
 
-ALTER TABLE friendship ALTER COLUMN id RESTART WITH 1;
 ALTER TABLE users ALTER COLUMN id RESTART WITH 1;
 ALTER TABLE films ALTER COLUMN id RESTART WITH 1;
 
@@ -20,7 +19,7 @@ INSERT INTO friendship (active_user_id, passive_user_id, is_accepted)
            (1, 3, TRUE),
            (4, 5, TRUE),
            (5, 3, TRUE),
-           (2, 1, FALSE);
+           (4, 1, FALSE);
 
 INSERT INTO films (name, description, release_date, duration, mpa_id, rate)
     VALUES ('Титаник', 'Корабль тонет', '1999-09-12', 180, 1, 8),

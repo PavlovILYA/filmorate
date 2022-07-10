@@ -7,10 +7,10 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS friendship (
-    id int AUTO_INCREMENT PRIMARY KEY,
     active_user_id int,
     passive_user_id int,
     is_accepted boolean DEFAULT FALSE,
+    PRIMARY KEY (active_user_id, passive_user_id),
     FOREIGN KEY (active_user_id) REFERENCES users(id),
     FOREIGN KEY (passive_user_id) REFERENCES users(id)
 );
