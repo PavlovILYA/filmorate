@@ -107,9 +107,11 @@ public class FilmDaoImpl implements FilmDao {
     public List<Film> getPopular(int size) {
         String sqlQuery = "SELECT f.id \n" +
                 "FROM film AS f \n" +
-                "JOIN user_like AS l ON f.id = l.film_id \n" +
+                "LEFT JOIN user_like AS l ON f.id = l.film_id \n" +
                 "GROUP BY f.name \n" +
-                "ORDER BY COUNT(*) DESC \n" +
+                "ORDER BY \n" +
+                "    CASE WHEN l.film_id IS NULL THEN 1 ELSE 0 END, \n" +
+                "    COUNT(*) DESC \n" +
                 "LIMIT ?;";
         List<Integer> popularFilmIds = jdbcTemplate.queryForList(sqlQuery, Integer.class, size);
         return popularFilmIds.stream()

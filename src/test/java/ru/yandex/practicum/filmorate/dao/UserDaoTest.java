@@ -44,40 +44,45 @@ public class UserDaoTest {
 
     @Test
     public void checkCreate() {
-        User user = getTestUserWithoutId("Имя 1", "i.e.pavlov@ya.ru",
-                "oh_pavlov", LocalDate.of(1999, Month.JUNE, 17));
+        User user = getTestUserWithoutId();
         long id = userDao.create(user).getId();
-        User returnedUser = userDao.get(id);
+        User createdUser = userDao.get(id);
 
-        assertEquals(user.getEmail(), returnedUser.getEmail());
-        assertEquals(user.getLogin(), returnedUser.getLogin());
-        assertEquals(user.getName(), returnedUser.getName());
-        assertEquals(user.getBirthday(), returnedUser.getBirthday());
+        assertEquals(user.getEmail(), createdUser.getEmail());
+        assertEquals(user.getLogin(), createdUser.getLogin());
+        assertEquals(user.getName(), createdUser.getName());
+        assertEquals(user.getBirthday(), createdUser.getBirthday());
     }
 
     @Test
     public void checkUpdate() {
         User user = userDao.get(2);
-        user.setName("Николай");
-        user.setLogin("nick");
-        user.setEmail("nicknick@pohcta.ru");
-        user.setBirthday(LocalDate.of(1989, Month.SEPTEMBER, 12));
-        userDao.update(user);
-        User returnedUser = userDao.get(2);
 
-        assertEquals(user.getId(), returnedUser.getId());
-        assertEquals(user.getEmail(), returnedUser.getEmail());
-        assertEquals(user.getLogin(), returnedUser.getLogin());
-        assertEquals(user.getName(), returnedUser.getName());
-        assertEquals(user.getBirthday(), returnedUser.getBirthday());
+        updateUser(user);
+
+        userDao.update(user);
+        User updatedUser = userDao.get(2);
+
+        assertEquals(user.getId(), updatedUser.getId());
+        assertEquals(user.getEmail(), updatedUser.getEmail());
+        assertEquals(user.getLogin(), updatedUser.getLogin());
+        assertEquals(user.getName(), updatedUser.getName());
+        assertEquals(user.getBirthday(), updatedUser.getBirthday());
     }
 
-    private User getTestUserWithoutId(String name, String email, String login, LocalDate birthday) {
+    private User getTestUserWithoutId() {
         User testUser = new User();
-        testUser.setName(name);
-        testUser.setBirthday(birthday);
-        testUser.setEmail(email);
-        testUser.setLogin(login);
+        testUser.setName("Имя 1");
+        testUser.setBirthday(LocalDate.of(1999, Month.JUNE, 17));
+        testUser.setEmail("i.e.pavlov@ya.ru");
+        testUser.setLogin("oh_pavlov");
         return testUser;
+    }
+
+    private void updateUser(User testUser) {
+        testUser.setName("Николай");
+        testUser.setLogin("nick");
+        testUser.setEmail("nicknick@pohcta.ru");
+        testUser.setBirthday(LocalDate.of(1989, Month.SEPTEMBER, 12));
     }
 }
