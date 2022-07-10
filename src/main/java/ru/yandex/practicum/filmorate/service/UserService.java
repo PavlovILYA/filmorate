@@ -9,8 +9,8 @@ import ru.yandex.practicum.filmorate.exception.FriendshipRequestNotFound;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.Friendship;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.FriendshipDao;
-import ru.yandex.practicum.filmorate.storage.UserDao;
+import ru.yandex.practicum.filmorate.dao.FriendshipDao;
+import ru.yandex.practicum.filmorate.dao.UserDao;
 
 import java.util.*;
 import java.util.stream.Collectors;
