@@ -1,14 +1,14 @@
 DELETE FROM friendship;
-DELETE FROM user_like;
-DELETE FROM filmorate_user;
+DELETE FROM user_films;
+DELETE FROM users;
 DELETE FROM film_genres;
-DELETE FROM film;
+DELETE FROM films;
 
 ALTER TABLE friendship ALTER COLUMN id RESTART WITH 1;
-ALTER TABLE filmorate_user ALTER COLUMN id RESTART WITH 1;
-ALTER TABLE film ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE users ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE films ALTER COLUMN id RESTART WITH 1;
 
-INSERT INTO filmorate_user (email, login, name, birthday)
+INSERT INTO users (email, login, name, birthday)
     VALUES ('superduper@gmail.com', 'superduper', 'Игорь', '1998-12-20'),
            ('cheapailna@gmail.com', 'cheapalina', 'Алина', '1997-04-23'),
            ('lol.ololoev@yahoo.com', 'lol!', 'Илья', '1999-06-17'),
@@ -22,7 +22,7 @@ INSERT INTO friendship (active_user_id, passive_user_id, is_accepted)
            (5, 3, TRUE),
            (2, 1, FALSE);
 
-INSERT INTO film (name, description, release_date, duration, mpa_id, rate)
+INSERT INTO films (name, description, release_date, duration, mpa_id, rate)
     VALUES ('Титаник', 'Корабль тонет', '1999-09-12', 180, 1, 8),
            ('Бойцовский клуб', 'У парня шиза', '2000-01-13', 139, 5, 8),
            ('Нет', 'Мирная революция в Чили. Как ушел Пиночет.', '2012-06-10', 110, 3, 9),
@@ -36,7 +36,7 @@ INSERT INTO film_genres (film_id, genre_id)
            (4, 3),
            (5, 1);
 
-INSERT INTO user_like (user_id, film_id)
+INSERT INTO user_films (user_id, film_id)
     values (1, 1), (1, 3), (1, 4),
            (2, 1), (2, 2),
            (3, 4), (3, 2), (3, 1),

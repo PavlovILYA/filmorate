@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenres;
 
 import java.util.List;
@@ -17,12 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:dao-test-data.sql")
 public class FilmGenresDaoTest {
     private final FilmGenresDao filmGenresDao;
-    private final FilmDao filmDao;
+    private final FilmsDao filmsDao;
 
     @Autowired
-    public FilmGenresDaoTest(FilmGenresDao filmGenresDao, FilmDao filmDao) {
+    public FilmGenresDaoTest(FilmGenresDao filmGenresDao, FilmsDao filmsDao) {
         this.filmGenresDao = filmGenresDao;
-        this.filmDao = filmDao;
+        this.filmsDao = filmsDao;
     }
 
     @Test

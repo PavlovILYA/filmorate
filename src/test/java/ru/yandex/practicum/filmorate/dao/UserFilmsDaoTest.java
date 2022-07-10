@@ -14,23 +14,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @AutoConfigureTestDatabase
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:dao-test-data.sql")
-public class UserLikeDaoTest {
-    private final UserLikeDao userLikeDao;
-    private final FilmDao filmDao;
+public class UserFilmsDaoTest {
+    private final UserFilmsDao userFilmsDao;
+    private final FilmsDao filmsDao;
 
     @Autowired
-    public UserLikeDaoTest(UserLikeDao userLikeDao, FilmDao filmDao) {
-        this.userLikeDao = userLikeDao;
-        this.filmDao = filmDao;
+    public UserFilmsDaoTest(UserFilmsDao userFilmsDao, FilmsDao filmsDao) {
+        this.userFilmsDao = userFilmsDao;
+        this.filmsDao = filmsDao;
     }
 
     @Test
     public void checkCreate() {
         // ставим два лайка Шреку - он выбивается на 1-е место по популярности
-        userLikeDao.create(4, 2);
-        userLikeDao.create(4, 5);
+        userFilmsDao.create(4, 2);
+        userFilmsDao.create(4, 5);
 
-        List<Film> popularFilms = filmDao.getPopular(1);
+        List<Film> popularFilms = filmsDao.getPopular(1);
 
         assertEquals("Шрек", popularFilms.get(0).getName());
     }
@@ -38,10 +38,10 @@ public class UserLikeDaoTest {
     @Test
     public void checkRemove() {
         // убираем два лайка Шреку - он опускается на 3-е место по популярности
-        userLikeDao.remove(4, 1);
-        userLikeDao.remove(4, 3);
+        userFilmsDao.remove(4, 1);
+        userFilmsDao.remove(4, 3);
 
-        List<Film> popularFilms = filmDao.getPopular(2);
+        List<Film> popularFilms = filmsDao.getPopular(2);
 
         assertEquals("Титаник", popularFilms.get(0).getName());
         assertEquals("Бойцовский клуб", popularFilms.get(1).getName());

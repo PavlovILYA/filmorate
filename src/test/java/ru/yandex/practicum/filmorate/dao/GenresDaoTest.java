@@ -14,17 +14,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @AutoConfigureTestDatabase
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:dao-test-data.sql")
-public class GenreDaoTest {
-    private final GenreDao genreDao;
+public class GenresDaoTest {
+    private final GenresDao genresDao;
 
     @Autowired
-    public GenreDaoTest(GenreDao genreDao) {
-        this.genreDao = genreDao;
+    public GenresDaoTest(GenresDao genresDao) {
+        this.genresDao = genresDao;
     }
 
     @Test
     public void checkGet() {
-        Genre genre = genreDao.get(3);
+        Genre genre = genresDao.get(3);
 
         assertEquals(3, genre.getId());
         assertEquals("Мультфильм", genre.getName());
@@ -32,7 +32,7 @@ public class GenreDaoTest {
 
     @Test
     public void checkGetAll() {
-        List<Genre> genres = genreDao.getAll();
+        List<Genre> genres = genresDao.getAll();
 
         assertEquals(6, genres.size());
     }

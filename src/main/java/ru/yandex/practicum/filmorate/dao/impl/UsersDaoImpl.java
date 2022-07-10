@@ -8,7 +8,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.dao.UserDao;
+import ru.yandex.practicum.filmorate.dao.UsersDao;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -18,17 +18,17 @@ import java.util.*;
 
 @Slf4j
 @Component
-public class UserDaoImpl implements UserDao {
+public class UsersDaoImpl implements UsersDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public UserDaoImpl(JdbcTemplate jdbcTemplate) {
+    public UsersDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public User create(User user) {
-        String sqlQuery = "INSERT INTO filmorate_user (email, login, name, birthday) \n" +
+        String sqlQuery = "INSERT INTO users (email, login, name, birthday) \n" +
                 "VALUES (?, ?, ?, ?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update((connection) -> {
@@ -47,7 +47,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User update(User user) {
-        String sqlQuery = "UPDATE filmorate_user \n" +
+        String sqlQuery = "UPDATE users \n" +
                 "SET email = ?, login = ?, name = ?, birthday = ? \n" +
                 "WHERE id = ?;";
         jdbcTemplate.update(sqlQuery, user.getEmail(), user.getLogin(),
@@ -62,13 +62,13 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getAll() {
-        String sqlQuery = "SELECT * FROM filmorate_user";
+        String sqlQuery = "SELECT * FROM users";
         return jdbcTemplate.query(sqlQuery, (resultSet, rowId) -> buildUser(resultSet));
     }
 
     @Override
     public User get(long userId) {
-        String sqlQuery = "SELECT id, email, login, name, birthday FROM filmorate_user \n" +
+        String sqlQuery = "SELECT id, email, login, name, birthday FROM users \n" +
                 "WHERE id = ?;";
         List<User> users = jdbcTemplate.query(sqlQuery,
                 (resultSet, rowId) -> buildUser(resultSet), userId);

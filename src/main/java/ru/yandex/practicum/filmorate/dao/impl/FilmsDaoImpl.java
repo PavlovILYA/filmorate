@@ -11,9 +11,9 @@ import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenres;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.dao.FilmDao;
+import ru.yandex.practicum.filmorate.dao.FilmsDao;
 import ru.yandex.practicum.filmorate.dao.FilmGenresDao;
-import ru.yandex.practicum.filmorate.dao.GenreDao;
+import ru.yandex.practicum.filmorate.dao.GenresDao;
 import ru.yandex.practicum.filmorate.dao.MpaDao;
 
 import java.sql.Date;
@@ -25,24 +25,24 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class FilmDaoImpl implements FilmDao {
+public class FilmsDaoImpl implements FilmsDao {
     private final JdbcTemplate jdbcTemplate;
     private final MpaDao mpaDao;
     private final FilmGenresDao filmGenresDao;
-    private final GenreDao genreDao;
+    private final GenresDao genresDao;
 
     @Autowired
-    public FilmDaoImpl(JdbcTemplate jdbcTemplate, MpaDao mpaDao,
-                       FilmGenresDao filmGenresDao, GenreDao genreDao) {
+    public FilmsDaoImpl(JdbcTemplate jdbcTemplate, MpaDao mpaDao,
+                        FilmGenresDao filmGenresDao, GenresDao genresDao) {
         this.jdbcTemplate = jdbcTemplate;
         this.mpaDao = mpaDao;
         this.filmGenresDao = filmGenresDao;
-        this.genreDao = genreDao;
+        this.genresDao = genresDao;
     }
 
     @Override
     public Film create(Film film) {
-        String sqlQuery = "INSERT INTO film " +
+        String sqlQuery = "INSERT INTO films " +
                 "(name, description, release_date, duration, mpa_id, rate)\n" +
                 "VALUES (?, ?, ?, ?, ?, ?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -65,7 +65,7 @@ public class FilmDaoImpl implements FilmDao {
 
     @Override
     public Film update(Film film) {
-        String sqlQuery = "UPDATE film SET name = ?, description = ?, " +
+        String sqlQuery = "UPDATE films SET name = ?, description = ?, " +
                 "release_date = ?, mpa_id = ?, rate = ?, duration = ?" +
                 "WHERE id = ?";
         int amountOfUpdated = jdbcTemplate.update(sqlQuery, film.getName(), film.getDescription(),
@@ -86,13 +86,13 @@ public class FilmDaoImpl implements FilmDao {
 
     @Override
     public List<Film> getAll() {
-        String sqlQuery = "SELECT * FROM film;";
+        String sqlQuery = "SELECT * FROM films;";
         return jdbcTemplate.query(sqlQuery, (resultSet, rowId) -> buildFilm(resultSet));
     }
 
     @Override
     public Film get(long filmId) {
-        String sqlQuery = "SELECT * FROM film WHERE id = ?;";
+        String sqlQuery = "SELECT * FROM films WHERE id = ?;";
         Film film;
         try {
             film = jdbcTemplate.queryForObject(sqlQuery,
@@ -106,8 +106,8 @@ public class FilmDaoImpl implements FilmDao {
     @Override
     public List<Film> getPopular(int size) {
         String sqlQuery = "SELECT f.id \n" +
-                "FROM film AS f \n" +
-                "LEFT JOIN user_like AS l ON f.id = l.film_id \n" +
+                "FROM films AS f \n" +
+                "LEFT JOIN user_films AS l ON f.id = l.film_id \n" +
                 "GROUP BY f.name \n" +
                 "ORDER BY \n" +
                 "    CASE WHEN l.film_id IS NULL THEN 1 ELSE 0 END, \n" +
@@ -122,7 +122,7 @@ public class FilmDaoImpl implements FilmDao {
     public Film buildFilm(ResultSet resultSet) throws SQLException {
         long id = resultSet.getLong("id");
         Set<Genre> genres = filmGenresDao.getByFilmId(id).stream()
-                .map(filmGenres -> genreDao.get(filmGenres.getGenreId()))
+                .map(filmGenres -> genresDao.get(filmGenres.getGenreId()))
                 .sorted(Comparator.comparing(Genre::getId))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
         log.info("genres: {}", genres);

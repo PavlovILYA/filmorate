@@ -16,17 +16,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @AutoConfigureTestDatabase
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:dao-test-data.sql")
-public class UserDaoTest {
-    private final UserDao userDao;
+public class UsersDaoTest {
+    private final UsersDao usersDao;
 
     @Autowired
-    public UserDaoTest(UserDao userDao) {
-        this.userDao = userDao;
+    public UsersDaoTest(UsersDao usersDao) {
+        this.usersDao = usersDao;
     }
 
     @Test
     public void checkGet() {
-        User user = userDao.get(1);
+        User user = usersDao.get(1);
 
         assertEquals(1, user.getId());
         assertEquals("superduper@gmail.com", user.getEmail());
@@ -37,7 +37,7 @@ public class UserDaoTest {
 
     @Test
     public void checkGetAll() {
-        List<User> users = userDao.getAll();
+        List<User> users = usersDao.getAll();
 
         assertEquals(5, users.size());
     }
@@ -45,8 +45,8 @@ public class UserDaoTest {
     @Test
     public void checkCreate() {
         User user = getTestUserWithoutId();
-        long id = userDao.create(user).getId();
-        User createdUser = userDao.get(id);
+        long id = usersDao.create(user).getId();
+        User createdUser = usersDao.get(id);
 
         assertEquals(user.getEmail(), createdUser.getEmail());
         assertEquals(user.getLogin(), createdUser.getLogin());
@@ -56,12 +56,12 @@ public class UserDaoTest {
 
     @Test
     public void checkUpdate() {
-        User user = userDao.get(2);
+        User user = usersDao.get(2);
 
         updateUser(user);
 
-        userDao.update(user);
-        User updatedUser = userDao.get(2);
+        usersDao.update(user);
+        User updatedUser = usersDao.get(2);
 
         assertEquals(user.getId(), updatedUser.getId());
         assertEquals(user.getEmail(), updatedUser.getEmail());

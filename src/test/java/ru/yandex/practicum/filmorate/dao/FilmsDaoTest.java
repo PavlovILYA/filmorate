@@ -19,17 +19,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @AutoConfigureTestDatabase
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:dao-test-data.sql")
-public class FilmDaoTest {
-    private final FilmDao filmDao;
+public class FilmsDaoTest {
+    private final FilmsDao filmsDao;
 
     @Autowired
-    public FilmDaoTest(FilmDao filmDao) {
-        this.filmDao = filmDao;
+    public FilmsDaoTest(FilmsDao filmsDao) {
+        this.filmsDao = filmsDao;
     }
 
     @Test
     public void checkGet() {
-        Film film = filmDao.get(2);
+        Film film = filmsDao.get(2);
 
         assertEquals(2, film.getId());
         assertEquals("Бойцовский клуб", film.getName());
@@ -44,7 +44,7 @@ public class FilmDaoTest {
 
     @Test
     public void checkGetAll() {
-        List<Film> films = filmDao.getAll();
+        List<Film> films = filmsDao.getAll();
 
         assertEquals(5, films.size());
     }
@@ -52,9 +52,9 @@ public class FilmDaoTest {
     @Test
     public void checkCreate() {
         Film film = getFilmWithoutId();
-        long id = filmDao.create(film).getId();
+        long id = filmsDao.create(film).getId();
 
-        Film createdFilm = filmDao.get(id);
+        Film createdFilm = filmsDao.get(id);
 
         assertEquals(film.getId(), createdFilm.getId());
         assertEquals(film.getName(), createdFilm.getName());
@@ -69,12 +69,12 @@ public class FilmDaoTest {
 
     @Test
     public void checkUpdate() {
-        Film film = filmDao.get(4);
+        Film film = filmsDao.get(4);
 
         updateFilm(film);
 
-        filmDao.update(film);
-        Film updatedFilm = filmDao.get(4);
+        filmsDao.update(film);
+        Film updatedFilm = filmsDao.get(4);
 
         assertEquals(film.getId(), updatedFilm.getId());
         assertEquals(film.getName(), updatedFilm.getName());
@@ -89,7 +89,7 @@ public class FilmDaoTest {
 
     @Test
     public void checkGetPopularSize6() {
-        List<Film> popularFilms = filmDao.getPopular(6);
+        List<Film> popularFilms = filmsDao.getPopular(6);
 
         assertEquals(5, popularFilms.size());
         assertEquals("Титаник", popularFilms.get(0).getName());
@@ -101,7 +101,7 @@ public class FilmDaoTest {
 
     @Test
     public void checkGetPopularSize3() {
-        List<Film> popularFilms = filmDao.getPopular(3);
+        List<Film> popularFilms = filmsDao.getPopular(3);
 
         assertEquals(3, popularFilms.size());
         assertEquals("Титаник", popularFilms.get(0).getName());

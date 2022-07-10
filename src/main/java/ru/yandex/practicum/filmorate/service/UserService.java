@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.Friendship;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.dao.FriendshipDao;
-import ru.yandex.practicum.filmorate.dao.UserDao;
+import ru.yandex.practicum.filmorate.dao.UsersDao;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,33 +18,33 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class UserService {
-    private final UserDao userDao;
+    private final UsersDao usersDao;
     private final FriendshipDao friendshipDao;
 
     @Autowired
-    public UserService(@Qualifier("userDaoImpl") UserDao userDao, FriendshipDao friendshipDao) {
-        this.userDao = userDao;
+    public UserService(@Qualifier("usersDaoImpl") UsersDao usersDao, FriendshipDao friendshipDao) {
+        this.usersDao = usersDao;
         this.friendshipDao = friendshipDao;
     }
 
     public User create(User user) {
         log.info("Создание пользователя: {}", user);
-        return userDao.create(user);
+        return usersDao.create(user);
     }
 
     public User update(User user) {
         log.info("Обновление пользователя: {}", user);
-        return userDao.update(user);
+        return usersDao.update(user);
     }
 
     public List<User> getAll() {
         log.info("Получение всех пользователей");
-        return userDao.getAll();
+        return usersDao.getAll();
     }
 
     public User get(long id) {
         log.info("Получение пользователя {}", id);
-        return userDao.get(id);
+        return usersDao.get(id);
     }
 
     public void makeFriends(long userId1, long userId2) {
@@ -94,9 +94,9 @@ public class UserService {
 
     private User getFriedFromFriendship(Friendship friendship, long userId) {
         if (friendship.getActiveUserId() == userId) {
-            return userDao.get(friendship.getPassiveUserId());
+            return usersDao.get(friendship.getPassiveUserId());
         } else if (friendship.isAccepted()) {
-            return userDao.get(friendship.getActiveUserId());
+            return usersDao.get(friendship.getActiveUserId());
         } else {
             return null;
         }

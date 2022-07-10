@@ -6,24 +6,24 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.GenreNotFoundException;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.dao.GenreDao;
+import ru.yandex.practicum.filmorate.dao.GenresDao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 @Component
-public class GenreDaoImp implements GenreDao {
+public class GenresDaoImp implements GenresDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public GenreDaoImp(JdbcTemplate jdbcTemplate) {
+    public GenresDaoImp(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public Genre get(long id) {
-        String sqlQuery = "SELECT * FROM genre WHERE id = ?;";
+        String sqlQuery = "SELECT * FROM genres WHERE id = ?;";
         Genre genre;
         try {
             genre = jdbcTemplate.queryForObject(sqlQuery, (resultSet, rowId) -> buildGenre(resultSet), id);
@@ -35,7 +35,7 @@ public class GenreDaoImp implements GenreDao {
 
     @Override
     public List<Genre> getAll() {
-        String sqlQuery = "SELECT * FROM genre;";
+        String sqlQuery = "SELECT * FROM genres;";
         return jdbcTemplate.query(sqlQuery, (resultSet, rowId) -> buildGenre(resultSet));
     }
 
