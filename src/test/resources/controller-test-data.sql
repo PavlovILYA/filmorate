@@ -1,0 +1,9 @@
+DELETE FROM friendship;
+DELETE FROM user_like;
+DELETE FROM filmorate_user;
+DELETE FROM film_genres;
+DELETE FROM film;
+
+ALTER TABLE friendship ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE filmorate_user ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE film ALTER COLUMN id RESTART WITH 1;
