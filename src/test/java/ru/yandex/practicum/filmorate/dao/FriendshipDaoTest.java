@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-import ru.yandex.practicum.filmorate.exception.FriendshipRequestNotFound;
+import ru.yandex.practicum.filmorate.exception.FriendshipNotFoundException;
 import ru.yandex.practicum.filmorate.model.Friendship;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class FriendshipDaoTest {
     }
 
     @Test
-    public void checkGet() throws FriendshipRequestNotFound {
+    public void checkGet() {
         Friendship friendship = friendshipDao.get(4, 5);
 
         assertEquals(4, friendship.getActiveUserId());
@@ -40,7 +40,7 @@ public class FriendshipDaoTest {
     }
 
     @Test
-    public void checkCreate() throws FriendshipRequestNotFound {
+    public void checkCreate() {
         friendshipDao.create(5, 1);
 
         Friendship friendship = friendshipDao.get(5, 1);
@@ -51,7 +51,7 @@ public class FriendshipDaoTest {
     }
 
     @Test
-    public void checkUpdate() throws FriendshipRequestNotFound {
+    public void checkUpdate() {
         friendshipDao.update(1, 2, false);
 
         Friendship friendship = friendshipDao.get(1, 2);
@@ -65,12 +65,11 @@ public class FriendshipDaoTest {
     public void checkRemove() {
         friendshipDao.remove(1, 2);
 
-        assertThrows(FriendshipRequestNotFound.class,
-                () -> friendshipDao.get(1, 2));
+        assertNull(friendshipDao.get(1, 2));
     }
 
     @Test
-    public void checkIsAccepted() throws FriendshipRequestNotFound {
+    public void checkIsAccepted() {
         boolean isAccepted = friendshipDao.isAccepted(1, 2);
 
         assertTrue(isAccepted);

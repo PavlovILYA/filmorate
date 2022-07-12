@@ -5,7 +5,6 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.FriendshipNotFoundException;
-import ru.yandex.practicum.filmorate.exception.FriendshipRequestNotFound;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.Friendship;
 import ru.yandex.practicum.filmorate.dao.FriendshipDao;
@@ -38,13 +37,13 @@ public class FriendshipDaoImpl implements FriendshipDao {
     }
 
     @Override
-    public boolean isAccepted(long activeUserId, long passiveUserId) throws FriendshipRequestNotFound {
+    public boolean isAccepted(long activeUserId, long passiveUserId) {
         String sqlQuery = "SELECT is_accepted FROM friendship " +
                 "WHERE active_user_id = ? AND passive_user_id = ?;";
         Boolean isAccepted = jdbcTemplate.queryForObject(sqlQuery, Boolean.class,
                 activeUserId, passiveUserId);
         if (isAccepted == null) {
-            throw new FriendshipRequestNotFound();
+            throw new FriendshipNotFoundException();
         }
         return isAccepted;
     }
@@ -78,7 +77,7 @@ public class FriendshipDaoImpl implements FriendshipDao {
     }
 
     @Override
-    public Friendship get(long activeUserId, long passiveUserId) throws FriendshipRequestNotFound {
+    public Friendship get(long activeUserId, long passiveUserId) {
         String sqlQuery = "SELECT * FROM friendship " +
                 "WHERE active_user_id = ? AND passive_user_id = ?;";
         Friendship friendship;
@@ -86,7 +85,7 @@ public class FriendshipDaoImpl implements FriendshipDao {
             friendship = jdbcTemplate.queryForObject(sqlQuery,
                     (resultSet, rowId) -> buildFriendship(resultSet), activeUserId, passiveUserId);
         } catch(IncorrectResultSizeDataAccessException e) {
-            throw new FriendshipRequestNotFound();
+            return null;
         }
         return friendship;
     }

@@ -3,17 +3,17 @@ package ru.yandex.practicum.filmorate.dao.impl;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.FilmGenres;
-import ru.yandex.practicum.filmorate.dao.FilmGenresDao;
+import ru.yandex.practicum.filmorate.dao.FilmGenreDao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 @Component
-public class FilmGenresDaoImpl implements FilmGenresDao {
+public class FilmGenreDaoImpl implements FilmGenreDao {
     private final JdbcTemplate jdbcTemplate;
 
-    public FilmGenresDaoImpl(JdbcTemplate jdbcTemplate) {
+    public FilmGenreDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

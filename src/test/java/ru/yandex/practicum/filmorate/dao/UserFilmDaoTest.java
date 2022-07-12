@@ -14,21 +14,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @AutoConfigureTestDatabase
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:dao-test-data.sql")
-public class UserFilmsDaoTest {
-    private final UserFilmsDao userFilmsDao;
+public class UserFilmDaoTest {
+    private final UserFilmDao userFilmDao;
     private final FilmsDao filmsDao;
 
     @Autowired
-    public UserFilmsDaoTest(UserFilmsDao userFilmsDao, FilmsDao filmsDao) {
-        this.userFilmsDao = userFilmsDao;
+    public UserFilmDaoTest(UserFilmDao userFilmDao, FilmsDao filmsDao) {
+        this.userFilmDao = userFilmDao;
         this.filmsDao = filmsDao;
     }
 
     @Test
     public void checkCreate() {
         // ставим два лайка Шреку - он выбивается на 1-е место по популярности
-        userFilmsDao.create(4, 2);
-        userFilmsDao.create(4, 5);
+        userFilmDao.create(4, 2);
+        userFilmDao.create(4, 5);
 
         List<Film> popularFilms = filmsDao.getPopular(1);
 
@@ -38,8 +38,8 @@ public class UserFilmsDaoTest {
     @Test
     public void checkRemove() {
         // убираем два лайка Шреку - он опускается на 3-е место по популярности
-        userFilmsDao.remove(4, 1);
-        userFilmsDao.remove(4, 3);
+        userFilmDao.remove(4, 1);
+        userFilmDao.remove(4, 3);
 
         List<Film> popularFilms = filmsDao.getPopular(2);
 

@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
-import ru.yandex.practicum.filmorate.dao.UserFilmsDao;
+import ru.yandex.practicum.filmorate.dao.UserFilmDao;
 
 @Component
-public class UserFilmsDaoImpl implements UserFilmsDao {
+public class UserFilmDaoImpl implements UserFilmDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public UserFilmsDaoImpl(JdbcTemplate jdbcTemplate) {
+    public UserFilmDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

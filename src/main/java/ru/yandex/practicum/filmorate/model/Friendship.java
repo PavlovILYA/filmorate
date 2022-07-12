@@ -8,5 +8,5 @@ import lombok.Data;
 public class Friendship {
     private long activeUserId;
     private long passiveUserId;
-    private boolean isAccepted;
+    private boolean accepted;
 }

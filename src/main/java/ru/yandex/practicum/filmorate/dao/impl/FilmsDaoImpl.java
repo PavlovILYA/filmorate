@@ -12,7 +12,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenres;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.dao.FilmsDao;
-import ru.yandex.practicum.filmorate.dao.FilmGenresDao;
+import ru.yandex.practicum.filmorate.dao.FilmGenreDao;
 import ru.yandex.practicum.filmorate.dao.GenresDao;
 import ru.yandex.practicum.filmorate.dao.MpaDao;
 
@@ -28,15 +28,15 @@ import java.util.stream.Collectors;
 public class FilmsDaoImpl implements FilmsDao {
     private final JdbcTemplate jdbcTemplate;
     private final MpaDao mpaDao;
-    private final FilmGenresDao filmGenresDao;
+    private final FilmGenreDao filmGenreDao;
     private final GenresDao genresDao;
 
     @Autowired
     public FilmsDaoImpl(JdbcTemplate jdbcTemplate, MpaDao mpaDao,
-                        FilmGenresDao filmGenresDao, GenresDao genresDao) {
+                        FilmGenreDao filmGenreDao, GenresDao genresDao) {
         this.jdbcTemplate = jdbcTemplate;
         this.mpaDao = mpaDao;
-        this.filmGenresDao = filmGenresDao;
+        this.filmGenreDao = filmGenreDao;
         this.genresDao = genresDao;
     }
 
@@ -121,7 +121,7 @@ public class FilmsDaoImpl implements FilmsDao {
 
     public Film buildFilm(ResultSet resultSet) throws SQLException {
         long id = resultSet.getLong("id");
-        Set<Genre> genres = filmGenresDao.getByFilmId(id).stream()
+        Set<Genre> genres = filmGenreDao.getByFilmId(id).stream()
                 .map(filmGenres -> genresDao.get(filmGenres.getGenreId()))
                 .sorted(Comparator.comparing(Genre::getId))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
@@ -142,11 +142,11 @@ public class FilmsDaoImpl implements FilmsDao {
         }
         genres.stream()
                 .map(genre -> new FilmGenres(id, genre.getId()))
-                .forEach(filmGenresDao::create);
+                .forEach(filmGenreDao::create);
     }
 
     private void removeGenresForFilm(Long id) {
-        List<FilmGenres> filmGenres = filmGenresDao.getByFilmId(id);
-        filmGenres.forEach(filmGenresDao::remove);
+        List<FilmGenres> filmGenres = filmGenreDao.getByFilmId(id);
+        filmGenres.forEach(filmGenreDao::remove);
     }
 }

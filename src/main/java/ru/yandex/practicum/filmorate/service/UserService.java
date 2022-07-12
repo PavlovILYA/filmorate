@@ -3,10 +3,8 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.FriendshipRequestNotFound;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
+import ru.yandex.practicum.filmorate.exception.FriendshipNotFoundException;
 import ru.yandex.practicum.filmorate.model.Friendship;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.dao.FriendshipDao;
@@ -48,33 +46,30 @@ public class UserService {
     }
 
     public void makeFriends(long userId1, long userId2) {
-        try {
-            Friendship friendship = friendshipDao.get(userId2, userId1);
+        Friendship friendship = friendshipDao.get(userId2, userId1);
+        if (friendship == null) {
+            friendship = friendshipDao.get(userId1, userId2);
+            if (friendship == null) {
+                friendshipDao.create(userId1, userId2);
+            }
+        } else {
             if (!friendship.isAccepted()) {
                 friendshipDao.update(userId2, userId1, true);
-            }
-        } catch (FriendshipRequestNotFound e1) {
-            try {
-                friendshipDao.get(userId1, userId2);
-            } catch (FriendshipRequestNotFound e2) {
-                friendshipDao.create(userId1, userId2);
             }
         }
     }
 
     public void stopBeingFriends(long userId1, long userId2) {
-        try {
-            friendshipDao.get(userId2, userId1);
-            friendshipDao.update(userId2, userId1, false);
-        } catch (FriendshipRequestNotFound e1) {
-            try {
-                friendshipDao.get(userId1, userId2);
-                friendshipDao.remove(userId1, userId2);
-                friendshipDao.create(userId2, userId1);
-            } catch (FriendshipRequestNotFound ignored) {
+        Friendship friendship = friendshipDao.get(userId2, userId1);
+        if (friendship == null) {
+            friendship = friendshipDao.get(userId1, userId2);
+            if (friendship == null) {
+                throw new FriendshipNotFoundException();
             }
-        } catch (DataIntegrityViolationException e) {
-            throw new UserNotFoundException();
+            friendshipDao.remove(userId1, userId2);
+            friendshipDao.create(userId2, userId1);
+        } else {
+            friendshipDao.update(userId2, userId1, false);
         }
     }
 
