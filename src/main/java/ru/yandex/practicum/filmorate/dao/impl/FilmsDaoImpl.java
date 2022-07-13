@@ -107,7 +107,7 @@ public class FilmsDaoImpl implements FilmsDao {
     public List<Film> getPopular(int size) {
         String sqlQuery = "SELECT f.id \n" +
                 "FROM films AS f \n" +
-                "LEFT JOIN user_films AS l ON f.id = l.film_id \n" +
+                "LEFT JOIN likes AS l ON f.id = l.film_id \n" +
                 "GROUP BY f.name \n" +
                 "ORDER BY \n" +
                 "    CASE WHEN l.film_id IS NULL THEN 1 ELSE 0 END, \n" +

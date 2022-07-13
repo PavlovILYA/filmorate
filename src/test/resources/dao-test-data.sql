@@ -1,5 +1,5 @@
 DELETE FROM friendship;
-DELETE FROM user_films;
+DELETE FROM likes;
 DELETE FROM users;
 DELETE FROM film_genres;
 DELETE FROM films;
@@ -35,7 +35,7 @@ INSERT INTO film_genres (film_id, genre_id)
            (4, 3),
            (5, 1);
 
-INSERT INTO user_films (user_id, film_id)
+INSERT INTO likes (user_id, film_id)
     values (1, 1), (1, 3), (1, 4),
            (2, 1), (2, 2),
            (3, 4), (3, 2), (3, 1),

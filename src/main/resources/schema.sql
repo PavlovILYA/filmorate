@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS films (
     FOREIGN KEY (mpa_id) REFERENCES mpa(id)
 );
 
-CREATE TABLE IF NOT EXISTS user_films (
+CREATE TABLE IF NOT EXISTS likes (
     user_id int,
     film_id int,
     PRIMARY KEY (user_id, film_id),

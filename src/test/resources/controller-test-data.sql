@@ -1,5 +1,5 @@
 DELETE FROM friendship;
-DELETE FROM user_films;
+DELETE FROM likes;
 DELETE FROM users;
 DELETE FROM film_genres;
 DELETE FROM films;

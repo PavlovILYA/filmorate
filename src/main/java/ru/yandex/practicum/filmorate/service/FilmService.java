@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.dao.FilmsDao;
-import ru.yandex.practicum.filmorate.dao.UserFilmDao;
+import ru.yandex.practicum.filmorate.dao.LikesDao;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 @Service
 public class FilmService {
     private final FilmsDao filmsDao;
-    private final UserFilmDao userFilmDao;
+    private final LikesDao likesDao;
 
     @Autowired
-    public FilmService(@Qualifier("filmsDaoImpl") FilmsDao filmsDao, UserFilmDao userFilmDao) {
+    public FilmService(@Qualifier("filmsDaoImpl") FilmsDao filmsDao, LikesDao likesDao) {
         this.filmsDao = filmsDao;
-        this.userFilmDao = userFilmDao;
+        this.likesDao = likesDao;
     }
 
     public Film create(Film film) {
@@ -44,11 +44,11 @@ public class FilmService {
     }
 
     public void like(long filmId, long userId) {
-        userFilmDao.create(filmId, userId);
+        likesDao.create(filmId, userId);
     }
 
     public void unlike(long filmId, long userId) {
-        userFilmDao.remove(filmId, userId);
+        likesDao.remove(filmId, userId);
     }
 
     public List<Film> getPopularFilms(int count) {
