@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -18,6 +19,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@AutoConfigureTestDatabase
 public class FilmControllerTest {
     private final FilmController filmController;
     private Validator validator;
@@ -92,33 +94,33 @@ public class FilmControllerTest {
     @Test
     public void checkNegativeFilmDuration() {
         Film testFilm = getTestFilm();
-        testFilm.setDurationMin(-1);
+        testFilm.setDuration(-1);
 
         Set<ConstraintViolation<Film>> violations = validator.validate(testFilm);
         assertEquals(1, violations.size());
         for (ConstraintViolation<Film> violation : violations) {
             assertEquals("должно быть больше 0", violation.getMessage());
-            assertEquals("durationMin", violation.getPropertyPath().toString());
+            assertEquals("duration", violation.getPropertyPath().toString());
         }
     }
 
     @Test
     public void checkZeroFilmDuration() {
         Film testFilm = getTestFilm();
-        testFilm.setDurationMin(0);
+        testFilm.setDuration(0);
 
         Set<ConstraintViolation<Film>> violations = validator.validate(testFilm);
         assertEquals(1, violations.size());
         for (ConstraintViolation<Film> violation : violations) {
             assertEquals("должно быть больше 0", violation.getMessage());
-            assertEquals("durationMin", violation.getPropertyPath().toString());
+            assertEquals("duration", violation.getPropertyPath().toString());
         }
     }
 
     @Test
     public void checkPositiveFilmDuration() {
         Film testFilm = getTestFilm();
-        testFilm.setDurationMin(1);
+        testFilm.setDuration(1);
 
         Set<ConstraintViolation<Film>> violations = validator.validate(testFilm);
         assertEquals(0, violations.size());
@@ -148,7 +150,7 @@ public class FilmControllerTest {
         testFilm.setName("Имя 1");
         testFilm.setDescription("Описание 1");
         testFilm.setReleaseDate(LocalDate.now());
-        testFilm.setDurationMin(100);
+        testFilm.setDuration(100);
         return testFilm;
     }
 

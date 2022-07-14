@@ -1,6 +1,6 @@
 # Диаграмма БД:
 
-- Основные сущности: __users__ и __films__. Они связаны через таблицу __user_films__ – понравившиеся пользователю фильмы.
+- Основные сущности: __users__ и __films__. Они связаны через таблицу __likes__ – понравившиеся пользователю фильмы.
 - Таблица для хранения пар пользователей (друзей) – __friendship__. Дружба односторонняя (как "подписчики" в instagram).
 - Таблицы __genres__ и __mpa__ – аналоги enam'а. 
 - Таблицы __films__ и __genres__ связаны через таблицу __film_genres__ (т.к. фильм может быть мультижанровым).
@@ -12,10 +12,10 @@ __*Примеры запросов*:__
 ``` sql
 SELECT f.id, f.NAME, COUNT(*)
   FROM films AS f
-  LEFT JOIN user_films AS uf ON f.id = uf.film_id
+  LEFT JOIN likes AS l ON f.id = l.film_id
   GROUP BY f.name
   ORDER BY
-    CASE WHEN uf.film_id IS NULL THEN 1 ELSE 0 END,
+    CASE WHEN l.film_id IS NULL THEN 1 ELSE 0 END,
     COUNT(*) DESC
   LIMIT [N];
 ```
@@ -63,10 +63,10 @@ SELECT u2.id, u2.name
 ``` sql
 SELECT g.name, COUNT(*)
   FROM films AS f
-  JOIN user_films AS uf ON f.id = uf.film_id
+  JOIN likes AS l ON f.id = l.film_id
   JOIN film_genres AS fg ON f.id = fg.film_id
   JOIN genres AS g ON fg.genre_id = g.id
-  WHERE uf.user_id = [id1]
+  WHERE l.user_id = [id1]
   GROUP BY g.name
   ORDER BY COUNT(*) DESC;
 ```
