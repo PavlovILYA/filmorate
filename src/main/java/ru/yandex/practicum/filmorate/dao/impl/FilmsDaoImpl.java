@@ -86,7 +86,8 @@ public class FilmsDaoImpl implements FilmsDao {
 
     @Override
     public List<Film> getAll() {
-        String sqlQuery = "SELECT * FROM films;";
+        String sqlQuery = "SELECT * FROM films " +
+                "ORDER BY id;";
         return jdbcTemplate.query(sqlQuery, (resultSet, rowId) -> buildFilm(resultSet));
     }
 
@@ -108,7 +109,9 @@ public class FilmsDaoImpl implements FilmsDao {
         String sqlQuery = "SELECT f.id \n" +
                 "FROM films AS f \n" +
                 "LEFT JOIN likes AS l ON f.id = l.film_id \n" +
-                "GROUP BY f.name \n" +
+                "GROUP BY " +
+                "    f.id, \n" +
+                "    CASE WHEN l.film_id IS NULL THEN 1 ELSE 0 END " +
                 "ORDER BY \n" +
                 "    CASE WHEN l.film_id IS NULL THEN 1 ELSE 0 END, \n" +
                 "    COUNT(*) DESC \n" +

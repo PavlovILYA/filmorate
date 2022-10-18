@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
-    id int AUTO_INCREMENT PRIMARY KEY,
+    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     email varchar(100) UNIQUE,
     login varchar(100) UNIQUE,
     name varchar(100),
@@ -16,17 +16,17 @@ CREATE TABLE IF NOT EXISTS friendship (
 );
 
 CREATE TABLE IF NOT EXISTS genres (
-    id int AUTO_INCREMENT PRIMARY KEY,
+    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name varchar(50)
 );
 
 CREATE TABLE IF NOT EXISTS mpa (
-    id int AUTO_INCREMENT PRIMARY KEY,
+    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name varchar(50)
 );
 
 CREATE TABLE IF NOT EXISTS films (
-    id int AUTO_INCREMENT PRIMARY KEY,
+    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name varchar(100),
     description text,
     release_date date,
