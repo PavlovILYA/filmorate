@@ -5,7 +5,7 @@
 - Таблицы __genres__ и __mpa__ – аналоги enam'а. 
 - Таблицы __films__ и __genres__ связаны через таблицу __film_genres__ (т.к. фильм может быть мультижанровым).
 
-![This is an image](src/main/resources/static/filmorate_db.png)
+![This is an image](images/filmorate_db.png)
 
 __*Примеры запросов*:__
 1. *Выбрать [N] самых популярных фильмов.*
