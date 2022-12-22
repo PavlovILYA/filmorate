@@ -2,20 +2,14 @@ package ru.yandex.practicum.filmorate.dao;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
-import ru.yandex.practicum.filmorate.exception.FriendshipNotFoundException;
+import ru.yandex.practicum.filmorate.AbstractIntegrationTest;
 import ru.yandex.practicum.filmorate.model.Friendship;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@AutoConfigureTestDatabase
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:dao-test-data.sql")
-public class FriendshipDaoTest {
+public class FriendshipDaoTest extends AbstractIntegrationTest {
     private final FriendshipDao friendshipDao;
 
     @Autowired
